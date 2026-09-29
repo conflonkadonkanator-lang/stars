@@ -4,15 +4,20 @@ on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Install Windows Cross-Compiler
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y g++-mingw-w64-i686
+
     - name: Compile ASI Plugin
       run: |
-        g++ -shared -O2 main.cpp -o VC.DynamicStars.asi -luser32 -lkernel32 -static-libgcc -static-libstdc++
+        i686-w64-mingw32-g++ -shared -O2 main.cpp -o VC.DynamicStars.asi -luser32 -lkernel32 -static-libgcc -static-libstdc++
 
     - name: Upload ASI
       uses: actions/upload-artifact@v4
