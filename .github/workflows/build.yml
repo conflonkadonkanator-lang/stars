@@ -4,20 +4,17 @@ on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-2022
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Install Windows Cross-Compiler
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y g++-mingw-w64-i686
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
 
-    - name: Compile ASI Plugin
-      run: |
-        i686-w64-mingw32-g++ -shared -O2 main.cpp -o VC.DynamicStars.asi -luser32 -lkernel32 -static-libgcc -static-libstdc++
+    - name: Compile Project
+      run: msbuild project.vcxproj /p:Configuration=Release /p:Platform=Win32
 
     - name: Upload ASI
       uses: actions/upload-artifact@v4
