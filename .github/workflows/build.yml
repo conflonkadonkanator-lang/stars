@@ -11,11 +11,9 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Compile ASI Plugin
-      shell: cmd
       run: |
-        call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x86
-        cl.exe /O2 /LD main.cpp /Fe:VC.DynamicStars.asi user32.lib kernel32.lib /link /INCREMENTAL:NO
-        
+        g++ -shared -O2 main.cpp -o VC.DynamicStars.asi -luser32 -lkernel32 -static-libgcc -static-libstdc++
+
     - name: Upload ASI
       uses: actions/upload-artifact@v4
       with:
