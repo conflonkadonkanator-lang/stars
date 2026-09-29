@@ -10,11 +10,13 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v2
+    - name: Setup Developer Command Prompt
+      uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: x86
 
-    - name: Compile Project
-      run: msbuild project.vcxproj /p:Configuration=Release /p:Platform=Win32
+    - name: Compile ASI
+      run: cl.exe /O2 /LD main.cpp /Fe:VC.DynamicStars.asi user32.lib kernel32.lib /link /INCREMENTAL:NO
 
     - name: Upload ASI
       uses: actions/upload-artifact@v4
